@@ -54,6 +54,7 @@ function Index() {
             <span className="mq-pill px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em]">
               Beta Preview
             </span>
+            <ThemeToggle />
           </div>
         </div>
         <div className="mq-gold-line mt-8" />
