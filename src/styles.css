@@ -4,6 +4,71 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* merQato brand tokens */
+:root {
+  --mq-bg: #f4eadb;
+  --mq-bg-2: #e8dfc8;
+  --mq-panel: #fff8ed;
+  --mq-panel-soft: #f6ecdb;
+  --mq-text: #080808;
+  --mq-muted: #685b4e;
+  --mq-line: rgba(202, 163, 90, 0.35);
+  --mq-gold: #b47f34;
+  --mq-gold-bright: #ca9a45;
+  --mq-cream: #e8dfc8;
+  --mq-red: #c41414;
+  --mq-shadow: 0 24px 80px rgba(8, 8, 8, 0.16);
+}
+
+html {
+  background: var(--mq-bg);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 78% 8%, rgba(202, 163, 90, 0.23), transparent 31rem),
+    radial-gradient(circle at 8% 2%, rgba(196, 20, 20, 0.12), transparent 24rem),
+    linear-gradient(135deg, var(--mq-bg), var(--mq-bg-2));
+  color: var(--mq-text);
+  font-family: Jost, Avenir, Montserrat, ui-sans-serif, system-ui, sans-serif;
+}
+
+.mq-display,
+h1.mq-display {
+  font-family: "Cormorant Garamond", Georgia, ui-serif, serif;
+  letter-spacing: -0.02em;
+}
+
+.mq-card {
+  border: 1px solid var(--mq-line);
+  background: color-mix(in srgb, var(--mq-panel) 92%, transparent);
+  box-shadow: var(--mq-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.mq-subcard {
+  border: 1px solid var(--mq-line);
+  background: color-mix(in srgb, var(--mq-panel-soft) 84%, transparent);
+}
+
+.mq-pill {
+  border-radius: 999px;
+  border: 1px solid var(--mq-line);
+  background: color-mix(in srgb, var(--mq-panel) 78%, transparent);
+  color: var(--mq-gold);
+}
+
+.mq-gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--mq-gold), transparent);
+}
+
+::selection {
+  background: var(--mq-gold);
+  color: #080808;
+}
+
 /*
  * Design system definition.
  *
