@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      repositories: {
+        Row: {
+          created_at: string
+          description: string
+          download_size: string
+          github_stars: number
+          github_url: string
+          hardware_requirements: string
+          id: number
+          image_url: string
+          is_mit: boolean
+          license_type: string
+          name: string
+          primary_language: string
+          quick_start_command: string
+          rate_limits: string
+          tech_stack: string
+          website_url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          download_size?: string
+          github_stars?: number
+          github_url: string
+          hardware_requirements?: string
+          id?: number
+          image_url?: string
+          is_mit?: boolean
+          license_type?: string
+          name: string
+          primary_language?: string
+          quick_start_command?: string
+          rate_limits?: string
+          tech_stack?: string
+          website_url?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          download_size?: string
+          github_stars?: number
+          github_url?: string
+          hardware_requirements?: string
+          id?: number
+          image_url?: string
+          is_mit?: boolean
+          license_type?: string
+          name?: string
+          primary_language?: string
+          quick_start_command?: string
+          rate_limits?: string
+          tech_stack?: string
+          website_url?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
