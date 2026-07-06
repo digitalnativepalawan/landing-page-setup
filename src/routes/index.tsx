@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import AgentIntegrations from "@/components/AgentIntegrations";
+import RemoveLovableBranding from "@/components/RemoveLovableBranding";
 import Tracker from "@/components/Tracker";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <main className="mq-page mx-auto max-w-7xl px-5 py-8 sm:py-10">
+      <RemoveLovableBranding />
       <header className="mq-card mb-8 overflow-hidden rounded-[2rem] p-6 sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
