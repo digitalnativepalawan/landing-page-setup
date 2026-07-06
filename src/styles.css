@@ -20,6 +20,19 @@
   --mq-shadow: 0 24px 80px rgba(8, 8, 8, 0.16);
 }
 
+.dark {
+  --mq-bg: #080808;
+  --mq-bg-2: #0d1117;
+  --mq-panel: #0b0f14;
+  --mq-panel-soft: #101720;
+  --mq-text: #e8dfc8;
+  --mq-muted: #b9aa92;
+  --mq-line: rgba(202, 163, 90, 0.28);
+  --mq-gold: #ca9a45;
+  --mq-gold-bright: #f0bd68;
+  --mq-shadow: 0 28px 100px rgba(0, 0, 0, 0.58);
+}
+
 html {
   background: var(--mq-bg);
 }
