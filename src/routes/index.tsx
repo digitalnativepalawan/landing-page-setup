@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Tracker from "@/components/Tracker";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const Route = createFileRoute("/")({
   head: () => ({
