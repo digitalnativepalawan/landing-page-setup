@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import AgentIntegrations from "@/components/AgentIntegrations";
 import Tracker from "@/components/Tracker";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -9,13 +10,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Track GitHub repos, license posture, stack, disk footprint, hardware needs, and quick-start commands — built for humans and AI agents.",
+          "Track GitHub repositories, license posture, stack details, infrastructure requirements, and MCP-readable metadata for humans and AI agents.",
       },
       { property: "og:title", content: "merQato.digital — Repository Intelligence" },
       {
         property: "og:description",
         content:
-          "Open-source repository tracker for humans and AI agents. Backed by Lovable Cloud.",
+          "Open-source repository tracker for humans and AI agents, with MCP, OpenAPI, and REST integrations.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -45,9 +46,9 @@ function Index() {
               Open-source repository tracker for humans and AI agents.
             </h1>
             <p className="mt-5 max-w-2xl border-l border-[var(--mq-gold)] pl-4 text-sm leading-7 text-[var(--mq-muted)]">
-              Track GitHub repos, license posture, stack details, disk footprint,
-              hardware needs, quick-start commands, and MCP-readable metadata in
-              one shared workspace — backed by Lovable Cloud.
+              Track GitHub repositories, license posture, stack details, disk
+              footprint, hardware needs, quick-start commands, and MCP-readable
+              metadata in one shared repository intelligence workspace.
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-3">
@@ -61,6 +62,7 @@ function Index() {
       </header>
 
       <Tracker />
+      <AgentIntegrations />
     </main>
   );
 }
