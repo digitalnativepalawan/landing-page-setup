@@ -81,12 +81,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Open-source repository tracker for humans and AI agents. Track GitHub repos, licenses, stacks, and quick-start commands.",
+          "Track GitHub repositories, license posture, stack details, infrastructure requirements, and MCP-readable metadata for humans and AI agents.",
       },
+      { property: "og:title", content: "merQato.digital — Repository Intelligence" },
+      { name: "twitter:title", content: "merQato.digital — Repository Intelligence" },
+      { property: "og:description", content: "Track GitHub repositories, license posture, stack details, infrastructure requirements, and MCP-readable metadata for humans and AI agents." },
+      { name: "twitter:description", content: "Track GitHub repositories, license posture, stack details, infrastructure requirements, and MCP-readable metadata for humans and AI agents." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/T9Th5uPVO0aXJIb4F3X0QFtM7K13/social-images/social-1783943022712-merqato_digital_logo.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/T9Th5uPVO0aXJIb4F3X0QFtM7K13/social-images/social-1783943022712-merqato_digital_logo.webp" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

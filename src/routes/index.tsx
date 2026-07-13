@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Open-source repository tracker for humans and AI agents, with MCP, OpenAPI, and REST integrations.",
+          "Track GitHub repositories, license posture, stack details, infrastructure requirements, and MCP-readable metadata for humans and AI agents.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
