@@ -63,13 +63,13 @@ const EMPTY_FORM: FormState = {
 const BASIC_FIELDS = [
   ["Repository Name *", "name", "Excalidraw"],
   ["Primary Language", "primaryLanguage", "TypeScript"],
-  ["Website / Docs URL", "websiteUrl", "https://project.dev"],
   ["Image / Logo URL", "imageUrl", "https://.../logo.png"],
   ["Tech Stack", "techStack", "React, NestJS, Postgres"],
   ["Download Size / Disk Footprint", "downloadSize", "1-2 GB (Docker)"],
   ["Minimum Hardware Requirements", "hardwareRequirements", "2GB RAM, 1 vCPU"],
   ["Rate Limits", "rateLimits", "None (Self-Hosted)"],
 ] as const;
+
 
 // DB row -> UI row
 type DbRow = {
