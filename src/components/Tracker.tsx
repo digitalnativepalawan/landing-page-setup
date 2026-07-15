@@ -352,8 +352,17 @@ export default function Tracker() {
             disabled={saving}
             className="rounded-xl bg-[var(--mq-gold)] px-5 py-2.5 text-sm font-bold text-black shadow-[0_0_24px_rgba(202,163,90,0.22)] transition hover:bg-[var(--mq-gold-bright)] disabled:opacity-60"
           >
-            {saving ? "Saving…" : "Add repository"}
+            {saving ? "Saving…" : editingId ? "Save changes" : "Add repository"}
           </button>
+          {editingId && (
+            <button
+              type="button"
+              onClick={cancelEdit}
+              className="rounded-xl border border-[var(--mq-line)] px-5 py-2.5 text-sm font-semibold text-[var(--mq-text)] transition hover:border-[var(--mq-gold)]"
+            >
+              Cancel
+            </button>
+          )}
         </div>
       </form>
 
