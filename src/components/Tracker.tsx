@@ -407,7 +407,7 @@ export default function Tracker() {
                 </div>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--mq-line)] pt-3">
                   <RepoLinks repo={repo} className="flex-row gap-4" />
-                  <RepoActions repo={repo} onView={setSelectedRepo} onDelete={handleDelete} />
+                  <RepoActions repo={repo} onView={setSelectedRepo} onEdit={startEdit} onDelete={handleDelete} />
                 </div>
               </article>
             ))
@@ -446,7 +446,7 @@ export default function Tracker() {
                       <RepoLinks repo={repo} className="flex-col gap-1" />
                     </td>
                     <td className="px-4 py-3">
-                      <RepoActions repo={repo} onView={setSelectedRepo} onDelete={handleDelete} />
+                      <RepoActions repo={repo} onView={setSelectedRepo} onEdit={startEdit} onDelete={handleDelete} />
                     </td>
                   </tr>
                 ))
