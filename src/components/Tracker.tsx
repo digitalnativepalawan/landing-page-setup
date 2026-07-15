@@ -204,13 +204,16 @@ export default function Tracker() {
       return;
     }
     setSaving(true);
-    const { error } = await supabase.from("repositories").insert(toDb(form));
+    const { error } = editingId
+      ? await supabase.from("repositories").update(toDb(form)).eq("id", editingId)
+      : await supabase.from("repositories").insert(toDb(form));
     setSaving(false);
     if (error) {
       setError(error.message);
       return;
     }
     setForm(EMPTY_FORM);
+    setEditingId(null);
     await load();
   }
 
