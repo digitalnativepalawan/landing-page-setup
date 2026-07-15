@@ -487,6 +487,7 @@ export default function Tracker() {
                 </div>
                 <div className="mt-3">
                   <TagList value={repo.techStack} limit={4} />
+                </div>
                 <div className="mt-3">
                   <WebsiteCell repo={repo} />
                 </div>
