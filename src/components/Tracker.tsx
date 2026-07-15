@@ -23,6 +23,8 @@ type Repository = {
   description: string;
   githubUrl: string;
   websiteUrl: string;
+  websiteTitle: string;
+  websiteDescription: string;
   imageUrl: string;
   licenseType: string;
   isMit: boolean;
@@ -43,6 +45,8 @@ const EMPTY_FORM: FormState = {
   description: "",
   githubUrl: "",
   websiteUrl: "",
+  websiteTitle: "",
+  websiteDescription: "",
   imageUrl: "",
   licenseType: "MIT",
   isMit: true,
@@ -54,6 +58,7 @@ const EMPTY_FORM: FormState = {
   rateLimits: "",
   quickStartCommand: "",
 };
+
 
 const BASIC_FIELDS = [
   ["Repository Name *", "name", "Excalidraw"],
