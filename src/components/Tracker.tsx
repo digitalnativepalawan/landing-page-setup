@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { LICENSE_OPTIONS } from "@/lib/mcpSchema";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchGitHubRepo } from "@/lib/github.functions";
+import { fetchWebsiteMeta } from "@/lib/website.functions";
 import {
   Badge,
   Field,
@@ -15,12 +16,15 @@ import {
   licenseTone,
 } from "@/lib/uiPrimitives";
 
+
 type Repository = {
   id: number;
   name: string;
   description: string;
   githubUrl: string;
   websiteUrl: string;
+  websiteTitle: string;
+  websiteDescription: string;
   imageUrl: string;
   licenseType: string;
   isMit: boolean;
@@ -41,6 +45,8 @@ const EMPTY_FORM: FormState = {
   description: "",
   githubUrl: "",
   websiteUrl: "",
+  websiteTitle: "",
+  websiteDescription: "",
   imageUrl: "",
   licenseType: "MIT",
   isMit: true,
@@ -53,16 +59,17 @@ const EMPTY_FORM: FormState = {
   quickStartCommand: "",
 };
 
+
 const BASIC_FIELDS = [
   ["Repository Name *", "name", "Excalidraw"],
   ["Primary Language", "primaryLanguage", "TypeScript"],
-  ["Website / Docs URL", "websiteUrl", "https://project.dev"],
   ["Image / Logo URL", "imageUrl", "https://.../logo.png"],
   ["Tech Stack", "techStack", "React, NestJS, Postgres"],
   ["Download Size / Disk Footprint", "downloadSize", "1-2 GB (Docker)"],
   ["Minimum Hardware Requirements", "hardwareRequirements", "2GB RAM, 1 vCPU"],
   ["Rate Limits", "rateLimits", "None (Self-Hosted)"],
 ] as const;
+
 
 // DB row -> UI row
 type DbRow = {
@@ -71,6 +78,8 @@ type DbRow = {
   description: string;
   github_url: string;
   website_url: string;
+  website_title: string;
+  website_description: string;
   image_url: string;
   license_type: string;
   is_mit: boolean;
@@ -91,6 +100,8 @@ function fromDb(r: DbRow): Repository {
     description: r.description,
     githubUrl: r.github_url,
     websiteUrl: r.website_url,
+    websiteTitle: r.website_title ?? "",
+    websiteDescription: r.website_description ?? "",
     imageUrl: r.image_url,
     licenseType: r.license_type,
     isMit: r.is_mit,
@@ -111,6 +122,8 @@ function toDb(f: FormState) {
     description: f.description,
     github_url: f.githubUrl,
     website_url: f.websiteUrl,
+    website_title: f.websiteTitle,
+    website_description: f.websiteDescription,
     image_url: f.imageUrl,
     license_type: f.licenseType,
     is_mit: f.isMit,
@@ -129,7 +142,9 @@ export default function Tracker() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [fetching, setFetching] = useState(false);
+  const [fetchingSite, setFetchingSite] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
@@ -137,6 +152,7 @@ export default function Tracker() {
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
 
   const runFetch = useServerFn(fetchGitHubRepo);
+  const runFetchSite = useServerFn(fetchWebsiteMeta);
 
   function startEdit(repo: Repository) {
     const { id: _id, createdAt: _c, ...rest } = repo;
@@ -195,6 +211,34 @@ export default function Tracker() {
       setFetching(false);
     }
   }
+
+
+
+  async function handleFetchSite() {
+    const url = form.websiteUrl.trim();
+    if (!url) {
+      setError("Enter a Website URL first, then click Fetch site.");
+      return;
+    }
+    setError(null);
+    setFetchingSite(true);
+    try {
+      const d = await runFetchSite({ data: { url } });
+      setForm((prev) => ({
+        ...prev,
+        websiteUrl: d.websiteUrl || prev.websiteUrl,
+        websiteTitle: d.websiteTitle || prev.websiteTitle,
+        websiteDescription: d.websiteDescription || prev.websiteDescription,
+        description: prev.description || d.websiteDescription,
+        imageUrl: prev.imageUrl || d.imageUrl,
+      }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Website fetch failed.");
+    } finally {
+      setFetchingSite(false);
+    }
+  }
+
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -277,6 +321,45 @@ export default function Tracker() {
               </div>
             </Field>
           </div>
+
+          <div className="sm:col-span-2 lg:col-span-2">
+            <Field label="Website / Docs URL">
+              <div className="flex gap-2">
+                <input
+                  className={cn(inputCls, "flex-1")}
+                  value={form.websiteUrl}
+                  onChange={(e) => update("websiteUrl", e.target.value)}
+                  placeholder="https://project.dev"
+                />
+                <button
+                  type="button"
+                  onClick={handleFetchSite}
+                  disabled={fetchingSite}
+                  className="shrink-0 rounded-xl bg-[var(--mq-gold)] px-4 py-2 text-sm font-bold text-black shadow-[0_0_24px_rgba(202,163,90,0.22)] transition hover:bg-[var(--mq-gold-bright)] disabled:opacity-60"
+                >
+                  {fetchingSite ? "Scraping…" : "Fetch Site Data"}
+                </button>
+              </div>
+            </Field>
+          </div>
+
+          <Field label="Website Title">
+            <input
+              className={inputCls}
+              value={form.websiteTitle}
+              onChange={(e) => update("websiteTitle", e.target.value)}
+              placeholder="Auto-filled from site"
+            />
+          </Field>
+
+          <Field label="Website Description" wide>
+            <textarea
+              className={cn(inputCls, "min-h-[70px] resize-y")}
+              value={form.websiteDescription}
+              onChange={(e) => update("websiteDescription", e.target.value)}
+              placeholder="Auto-filled meta description"
+            />
+          </Field>
 
           {BASIC_FIELDS.map(([label, key, placeholder]) => (
             <Field key={key} label={label}>
@@ -405,6 +488,9 @@ export default function Tracker() {
                 <div className="mt-3">
                   <TagList value={repo.techStack} limit={4} />
                 </div>
+                <div className="mt-3">
+                  <WebsiteCell repo={repo} />
+                </div>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--mq-line)] pt-3">
                   <RepoLinks repo={repo} className="flex-row gap-4" />
                   <RepoActions repo={repo} onView={setSelectedRepo} onEdit={startEdit} onDelete={handleDelete} />
@@ -418,7 +504,7 @@ export default function Tracker() {
           <table className="w-full text-left text-sm">
             <thead className="bg-[color:rgb(202_163_90_/_0.08)] text-xs uppercase tracking-[0.16em] text-[var(--mq-gold)]">
               <tr>
-                {["Repository", "Tech Stack", "Stars", "Language", "License", "Links", ""].map((h) => (
+                {["Repository", "Website", "Tech Stack", "Stars", "Language", "License", "Links", ""].map((h) => (
                   <th key={h} className="px-4 py-3 font-semibold">
                     {h}
                   </th>
@@ -428,7 +514,7 @@ export default function Tracker() {
             <tbody className="divide-y divide-[var(--mq-line)]">
               {loading || filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-[var(--mq-muted)]">
+                  <td colSpan={8} className="px-4 py-12 text-center text-[var(--mq-muted)]">
                     {loading ? "Loading…" : "No repositories yet. Add one above."}
                   </td>
                 </tr>
@@ -438,6 +524,7 @@ export default function Tracker() {
                     <td className="min-w-[250px] px-4 py-3">
                       <RepoIdentity repo={repo} />
                     </td>
+                    <td className="min-w-[220px] max-w-[300px] px-4 py-3"><WebsiteCell repo={repo} /></td>
                     <td className="px-4 py-3"><TagList value={repo.techStack} /></td>
                     <td className="px-4 py-3"><Badge tone="gold">★ {formatStars(repo.githubStars)}</Badge></td>
                     <td className="px-4 py-3"><Badge tone={languageTone(repo.primaryLanguage)}>{repo.primaryLanguage || "—"}</Badge></td>
@@ -479,6 +566,43 @@ function RepoIdentity({ repo }: { repo: Repository }) {
           {repo.description || "No description"}
         </p>
       </div>
+    </div>
+  );
+}
+
+function WebsiteCell({ repo }: { repo: Repository }) {
+  if (!repo.websiteUrl && !repo.websiteTitle && !repo.websiteDescription) {
+    return <span className="text-xs text-[var(--mq-muted)]">—</span>;
+  }
+  let host = "";
+  try {
+    host = repo.websiteUrl ? new URL(repo.websiteUrl).hostname.replace(/^www\./, "") : "";
+  } catch {
+    host = repo.websiteUrl;
+  }
+  return (
+    <div className="space-y-1">
+      {repo.websiteUrl && (
+        <a
+          href={repo.websiteUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="block truncate text-xs font-semibold text-[var(--mq-gold)] hover:underline"
+          title={repo.websiteUrl}
+        >
+          {host || repo.websiteUrl} ↗
+        </a>
+      )}
+      {repo.websiteTitle && (
+        <p className="line-clamp-1 text-xs font-semibold text-[var(--mq-text)]">
+          {repo.websiteTitle}
+        </p>
+      )}
+      {repo.websiteDescription && (
+        <p className="line-clamp-2 text-xs text-[var(--mq-muted)]">
+          {repo.websiteDescription}
+        </p>
+      )}
     </div>
   );
 }

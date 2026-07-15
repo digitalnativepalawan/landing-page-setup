@@ -31,6 +31,8 @@ export type Database = {
           quick_start_command: string
           rate_limits: string
           tech_stack: string
+          website_description: string
+          website_title: string
           website_url: string
         }
         Insert: {
@@ -49,6 +51,8 @@ export type Database = {
           quick_start_command?: string
           rate_limits?: string
           tech_stack?: string
+          website_description?: string
+          website_title?: string
           website_url?: string
         }
         Update: {
@@ -67,6 +71,8 @@ export type Database = {
           quick_start_command?: string
           rate_limits?: string
           tech_stack?: string
+          website_description?: string
+          website_title?: string
           website_url?: string
         }
         Relationships: []
