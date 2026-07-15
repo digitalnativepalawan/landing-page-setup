@@ -570,6 +570,43 @@ function RepoIdentity({ repo }: { repo: Repository }) {
   );
 }
 
+function WebsiteCell({ repo }: { repo: Repository }) {
+  if (!repo.websiteUrl && !repo.websiteTitle && !repo.websiteDescription) {
+    return <span className="text-xs text-[var(--mq-muted)]">—</span>;
+  }
+  let host = "";
+  try {
+    host = repo.websiteUrl ? new URL(repo.websiteUrl).hostname.replace(/^www\./, "") : "";
+  } catch {
+    host = repo.websiteUrl;
+  }
+  return (
+    <div className="space-y-1">
+      {repo.websiteUrl && (
+        <a
+          href={repo.websiteUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="block truncate text-xs font-semibold text-[var(--mq-gold)] hover:underline"
+          title={repo.websiteUrl}
+        >
+          {host || repo.websiteUrl} ↗
+        </a>
+      )}
+      {repo.websiteTitle && (
+        <p className="line-clamp-1 text-xs font-semibold text-[var(--mq-text)]">
+          {repo.websiteTitle}
+        </p>
+      )}
+      {repo.websiteDescription && (
+        <p className="line-clamp-2 text-xs text-[var(--mq-muted)]">
+          {repo.websiteDescription}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function RepoLinks({ repo, className }: { repo: Repository; className?: string }) {
   return (
     <div className={cn("flex text-xs font-semibold", className)}>
