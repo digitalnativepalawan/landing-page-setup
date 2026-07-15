@@ -511,7 +511,7 @@ export default function Tracker() {
             <tbody className="divide-y divide-[var(--mq-line)]">
               {loading || filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-[var(--mq-muted)]">
+                  <td colSpan={8} className="px-4 py-12 text-center text-[var(--mq-muted)]">
                     {loading ? "Loading…" : "No repositories yet. Add one above."}
                   </td>
                 </tr>
