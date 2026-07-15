@@ -209,7 +209,32 @@ export default function Tracker() {
       setError(err instanceof Error ? err.message : "Fetch failed.");
     } finally {
       setFetching(false);
+  }
+
+  async function handleFetchSite() {
+    const url = form.websiteUrl.trim();
+    if (!url) {
+      setError("Enter a Website URL first, then click Fetch site.");
+      return;
     }
+    setError(null);
+    setFetchingSite(true);
+    try {
+      const d = await runFetchSite({ data: { url } });
+      setForm((prev) => ({
+        ...prev,
+        websiteUrl: d.websiteUrl || prev.websiteUrl,
+        websiteTitle: d.websiteTitle || prev.websiteTitle,
+        websiteDescription: d.websiteDescription || prev.websiteDescription,
+        description: prev.description || d.websiteDescription,
+        imageUrl: prev.imageUrl || d.imageUrl,
+      }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Website fetch failed.");
+    } finally {
+      setFetchingSite(false);
+    }
+  }
   }
 
   async function handleSubmit(e: FormEvent) {
