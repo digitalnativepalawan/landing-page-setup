@@ -78,6 +78,8 @@ type DbRow = {
   description: string;
   github_url: string;
   website_url: string;
+  website_title: string;
+  website_description: string;
   image_url: string;
   license_type: string;
   is_mit: boolean;
