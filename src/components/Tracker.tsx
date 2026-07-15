@@ -142,7 +142,9 @@ export default function Tracker() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [fetching, setFetching] = useState(false);
+  const [fetchingSite, setFetchingSite] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
