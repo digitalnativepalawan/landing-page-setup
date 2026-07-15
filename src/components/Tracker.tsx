@@ -131,11 +131,27 @@ export default function Tracker() {
   const [fetching, setFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const [licenseFilter, setLicenseFilter] = useState("all");
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
 
   const runFetch = useServerFn(fetchGitHubRepo);
+
+  function startEdit(repo: Repository) {
+    const { id: _id, createdAt: _c, ...rest } = repo;
+    setForm(rest);
+    setEditingId(repo.id);
+    setError(null);
+    setSelectedRepo(null);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function cancelEdit() {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+    setError(null);
+  }
 
   async function load() {
     setLoading(true);
