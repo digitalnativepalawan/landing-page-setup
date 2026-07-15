@@ -238,7 +238,7 @@ export default function Tracker() {
       setFetchingSite(false);
     }
   }
-  }
+
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
