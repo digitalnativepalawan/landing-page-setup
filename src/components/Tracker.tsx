@@ -501,7 +501,7 @@ export default function Tracker() {
           <table className="w-full text-left text-sm">
             <thead className="bg-[color:rgb(202_163_90_/_0.08)] text-xs uppercase tracking-[0.16em] text-[var(--mq-gold)]">
               <tr>
-                {["Repository", "Tech Stack", "Stars", "Language", "License", "Links", ""].map((h) => (
+                {["Repository", "Website", "Tech Stack", "Stars", "Language", "License", "Links", ""].map((h) => (
                   <th key={h} className="px-4 py-3 font-semibold">
                     {h}
                   </th>
