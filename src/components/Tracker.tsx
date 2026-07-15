@@ -122,6 +122,8 @@ function toDb(f: FormState) {
     description: f.description,
     github_url: f.githubUrl,
     website_url: f.websiteUrl,
+    website_title: f.websiteTitle,
+    website_description: f.websiteDescription,
     image_url: f.imageUrl,
     license_type: f.licenseType,
     is_mit: f.isMit,
