@@ -10,33 +10,101 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiOpenapiDotjsonRouteImport } from './routes/api/openapi[.]json'
+import { Route as ApiMcpRouteImport } from './routes/api/mcp'
+import { Route as ApiMcpSchemaRouteImport } from './routes/api/mcp/schema'
+import { Route as ApiAgentsToolsRouteImport } from './routes/api/agents/tools'
+import { Route as ApiAgentsCallToolRouteImport } from './routes/api/agents/call/$tool'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiOpenapiDotjsonRoute = ApiOpenapiDotjsonRouteImport.update({
+  id: '/api/openapi.json',
+  path: '/api/openapi.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMcpRoute = ApiMcpRouteImport.update({
+  id: '/api/mcp',
+  path: '/api/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMcpSchemaRoute = ApiMcpSchemaRouteImport.update({
+  id: '/schema',
+  path: '/schema',
+  getParentRoute: () => ApiMcpRoute,
+} as any)
+const ApiAgentsToolsRoute = ApiAgentsToolsRouteImport.update({
+  id: '/api/agents/tools',
+  path: '/api/agents/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentsCallToolRoute = ApiAgentsCallToolRouteImport.update({
+  id: '/api/agents/call/$tool',
+  path: '/api/agents/call/$tool',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/mcp': typeof ApiMcpRouteWithChildren
+  '/api/openapi.json': typeof ApiOpenapiDotjsonRoute
+  '/api/agents/tools': typeof ApiAgentsToolsRoute
+  '/api/mcp/schema': typeof ApiMcpSchemaRoute
+  '/api/agents/call/$tool': typeof ApiAgentsCallToolRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/mcp': typeof ApiMcpRouteWithChildren
+  '/api/openapi.json': typeof ApiOpenapiDotjsonRoute
+  '/api/agents/tools': typeof ApiAgentsToolsRoute
+  '/api/mcp/schema': typeof ApiMcpSchemaRoute
+  '/api/agents/call/$tool': typeof ApiAgentsCallToolRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/mcp': typeof ApiMcpRouteWithChildren
+  '/api/openapi.json': typeof ApiOpenapiDotjsonRoute
+  '/api/agents/tools': typeof ApiAgentsToolsRoute
+  '/api/mcp/schema': typeof ApiMcpSchemaRoute
+  '/api/agents/call/$tool': typeof ApiAgentsCallToolRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/mcp'
+    | '/api/openapi.json'
+    | '/api/agents/tools'
+    | '/api/mcp/schema'
+    | '/api/agents/call/$tool'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/mcp'
+    | '/api/openapi.json'
+    | '/api/agents/tools'
+    | '/api/mcp/schema'
+    | '/api/agents/call/$tool'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/mcp'
+    | '/api/openapi.json'
+    | '/api/agents/tools'
+    | '/api/mcp/schema'
+    | '/api/agents/call/$tool'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiMcpRoute: typeof ApiMcpRouteWithChildren
+  ApiOpenapiDotjsonRoute: typeof ApiOpenapiDotjsonRoute
+  ApiAgentsToolsRoute: typeof ApiAgentsToolsRoute
+  ApiAgentsCallToolRoute: typeof ApiAgentsCallToolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +116,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/openapi.json': {
+      id: '/api/openapi.json'
+      path: '/api/openapi.json'
+      fullPath: '/api/openapi.json'
+      preLoaderRoute: typeof ApiOpenapiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mcp': {
+      id: '/api/mcp'
+      path: '/api/mcp'
+      fullPath: '/api/mcp'
+      preLoaderRoute: typeof ApiMcpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mcp/schema': {
+      id: '/api/mcp/schema'
+      path: '/schema'
+      fullPath: '/api/mcp/schema'
+      preLoaderRoute: typeof ApiMcpSchemaRouteImport
+      parentRoute: typeof ApiMcpRoute
+    }
+    '/api/agents/tools': {
+      id: '/api/agents/tools'
+      path: '/api/agents/tools'
+      fullPath: '/api/agents/tools'
+      preLoaderRoute: typeof ApiAgentsToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/agents/call/$tool': {
+      id: '/api/agents/call/$tool'
+      path: '/api/agents/call/$tool'
+      fullPath: '/api/agents/call/$tool'
+      preLoaderRoute: typeof ApiAgentsCallToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface ApiMcpRouteChildren {
+  ApiMcpSchemaRoute: typeof ApiMcpSchemaRoute
+}
+
+const ApiMcpRouteChildren: ApiMcpRouteChildren = {
+  ApiMcpSchemaRoute: ApiMcpSchemaRoute,
+}
+
+const ApiMcpRouteWithChildren =
+  ApiMcpRoute._addFileChildren(ApiMcpRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiMcpRoute: ApiMcpRouteWithChildren,
+  ApiOpenapiDotjsonRoute: ApiOpenapiDotjsonRoute,
+  ApiAgentsToolsRoute: ApiAgentsToolsRoute,
+  ApiAgentsCallToolRoute: ApiAgentsCallToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
