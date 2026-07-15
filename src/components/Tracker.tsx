@@ -322,6 +322,45 @@ export default function Tracker() {
             </Field>
           </div>
 
+          <div className="sm:col-span-2 lg:col-span-2">
+            <Field label="Website / Docs URL">
+              <div className="flex gap-2">
+                <input
+                  className={cn(inputCls, "flex-1")}
+                  value={form.websiteUrl}
+                  onChange={(e) => update("websiteUrl", e.target.value)}
+                  placeholder="https://project.dev"
+                />
+                <button
+                  type="button"
+                  onClick={handleFetchSite}
+                  disabled={fetchingSite}
+                  className="shrink-0 rounded-xl bg-[var(--mq-gold)] px-4 py-2 text-sm font-bold text-black shadow-[0_0_24px_rgba(202,163,90,0.22)] transition hover:bg-[var(--mq-gold-bright)] disabled:opacity-60"
+                >
+                  {fetchingSite ? "Scraping…" : "Fetch Site Data"}
+                </button>
+              </div>
+            </Field>
+          </div>
+
+          <Field label="Website Title">
+            <input
+              className={inputCls}
+              value={form.websiteTitle}
+              onChange={(e) => update("websiteTitle", e.target.value)}
+              placeholder="Auto-filled from site"
+            />
+          </Field>
+
+          <Field label="Website Description" wide>
+            <textarea
+              className={cn(inputCls, "min-h-[70px] resize-y")}
+              value={form.websiteDescription}
+              onChange={(e) => update("websiteDescription", e.target.value)}
+              placeholder="Auto-filled meta description"
+            />
+          </Field>
+
           {BASIC_FIELDS.map(([label, key, placeholder]) => (
             <Field key={key} label={label}>
               <input
