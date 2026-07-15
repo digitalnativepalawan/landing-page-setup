@@ -521,6 +521,7 @@ export default function Tracker() {
                     <td className="min-w-[250px] px-4 py-3">
                       <RepoIdentity repo={repo} />
                     </td>
+                    <td className="min-w-[220px] max-w-[300px] px-4 py-3"><WebsiteCell repo={repo} /></td>
                     <td className="px-4 py-3"><TagList value={repo.techStack} /></td>
                     <td className="px-4 py-3"><Badge tone="gold">★ {formatStars(repo.githubStars)}</Badge></td>
                     <td className="px-4 py-3"><Badge tone={languageTone(repo.primaryLanguage)}>{repo.primaryLanguage || "—"}</Badge></td>
