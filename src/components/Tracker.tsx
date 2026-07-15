@@ -152,6 +152,7 @@ export default function Tracker() {
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
 
   const runFetch = useServerFn(fetchGitHubRepo);
+  const runFetchSite = useServerFn(fetchWebsiteMeta);
 
   function startEdit(repo: Repository) {
     const { id: _id, createdAt: _c, ...rest } = repo;
