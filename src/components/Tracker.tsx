@@ -131,11 +131,27 @@ export default function Tracker() {
   const [fetching, setFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const [licenseFilter, setLicenseFilter] = useState("all");
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
 
   const runFetch = useServerFn(fetchGitHubRepo);
+
+  function startEdit(repo: Repository) {
+    const { id: _id, createdAt: _c, ...rest } = repo;
+    setForm(rest);
+    setEditingId(repo.id);
+    setError(null);
+    setSelectedRepo(null);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function cancelEdit() {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+    setError(null);
+  }
 
   async function load() {
     setLoading(true);
@@ -188,13 +204,16 @@ export default function Tracker() {
       return;
     }
     setSaving(true);
-    const { error } = await supabase.from("repositories").insert(toDb(form));
+    const { error } = editingId
+      ? await supabase.from("repositories").update(toDb(form)).eq("id", editingId)
+      : await supabase.from("repositories").insert(toDb(form));
     setSaving(false);
     if (error) {
       setError(error.message);
       return;
     }
     setForm(EMPTY_FORM);
+    setEditingId(null);
     await load();
   }
 
@@ -228,10 +247,10 @@ export default function Tracker() {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--mq-gold)]">
-              Repository Intake
+              {editingId ? "Edit Repository" : "Repository Intake"}
             </p>
             <h2 className="mt-1 text-2xl font-semibold text-[var(--mq-text)]">
-              Add a repository
+              {editingId ? `Editing #${editingId}` : "Add a repository"}
             </h2>
           </div>
           <Badge tone="gold">Backed by Lovable Cloud</Badge>
@@ -333,8 +352,17 @@ export default function Tracker() {
             disabled={saving}
             className="rounded-xl bg-[var(--mq-gold)] px-5 py-2.5 text-sm font-bold text-black shadow-[0_0_24px_rgba(202,163,90,0.22)] transition hover:bg-[var(--mq-gold-bright)] disabled:opacity-60"
           >
-            {saving ? "Saving…" : "Add repository"}
+            {saving ? "Saving…" : editingId ? "Save changes" : "Add repository"}
           </button>
+          {editingId && (
+            <button
+              type="button"
+              onClick={cancelEdit}
+              className="rounded-xl border border-[var(--mq-line)] px-5 py-2.5 text-sm font-semibold text-[var(--mq-text)] transition hover:border-[var(--mq-gold)]"
+            >
+              Cancel
+            </button>
+          )}
         </div>
       </form>
 
@@ -379,7 +407,7 @@ export default function Tracker() {
                 </div>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--mq-line)] pt-3">
                   <RepoLinks repo={repo} className="flex-row gap-4" />
-                  <RepoActions repo={repo} onView={setSelectedRepo} onDelete={handleDelete} />
+                  <RepoActions repo={repo} onView={setSelectedRepo} onEdit={startEdit} onDelete={handleDelete} />
                 </div>
               </article>
             ))
@@ -418,7 +446,7 @@ export default function Tracker() {
                       <RepoLinks repo={repo} className="flex-col gap-1" />
                     </td>
                     <td className="px-4 py-3">
-                      <RepoActions repo={repo} onView={setSelectedRepo} onDelete={handleDelete} />
+                      <RepoActions repo={repo} onView={setSelectedRepo} onEdit={startEdit} onDelete={handleDelete} />
                     </td>
                   </tr>
                 ))
@@ -473,19 +501,27 @@ function RepoLinks({ repo, className }: { repo: Repository; className?: string }
 function RepoActions({
   repo,
   onView,
+  onEdit,
   onDelete,
 }: {
   repo: Repository;
   onView: (repo: Repository) => void;
+  onEdit: (repo: Repository) => void;
   onDelete: (id: number) => void;
 }) {
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       <button
         onClick={() => onView(repo)}
         className="rounded-lg bg-[var(--mq-gold)] px-3 py-1.5 text-xs font-bold text-black"
       >
         View
+      </button>
+      <button
+        onClick={() => onEdit(repo)}
+        className="rounded-lg border border-[var(--mq-line)] px-3 py-1.5 text-xs font-semibold text-[var(--mq-text)] hover:border-[var(--mq-gold)]"
+      >
+        Edit
       </button>
       <button
         onClick={() => onDelete(repo.id)}
@@ -496,6 +532,7 @@ function RepoActions({
     </div>
   );
 }
+
 
 function StatsDrawer({ repo, onClose }: { repo: Repository | null; onClose: () => void }) {
   if (!repo) return null;
