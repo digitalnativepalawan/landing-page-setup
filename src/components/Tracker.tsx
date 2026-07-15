@@ -243,10 +243,21 @@ export default function Tracker() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!form.name.trim() || !form.githubUrl.trim()) {
-      setError("Repository name and GitHub URL are required.");
+    const hasGithub = form.githubUrl.trim().length > 0;
+    const hasWebsite = form.websiteUrl.trim().length > 0;
+    if (!hasGithub && !hasWebsite) {
+      setError("Add a GitHub URL or a Website URL before saving.");
       return;
     }
+    let name = form.name.trim();
+    if (!name) {
+      if (hasWebsite) {
+        try { name = new URL(form.websiteUrl.trim()).hostname.replace(/^www\./, ""); } catch { name = form.websiteUrl.trim(); }
+      } else if (hasGithub) {
+        name = form.githubUrl.trim().split("/").filter(Boolean).pop() ?? "repository";
+      }
+    }
+    const payload: FormState = { ...form, name };
     setSaving(true);
     const { error } = editingId
       ? await supabase.from("repositories").update(toDb(form)).eq("id", editingId)
