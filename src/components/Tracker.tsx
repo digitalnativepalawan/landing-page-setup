@@ -209,7 +209,10 @@ export default function Tracker() {
       setError(err instanceof Error ? err.message : "Fetch failed.");
     } finally {
       setFetching(false);
+    }
   }
+
+
 
   async function handleFetchSite() {
     const url = form.websiteUrl.trim();
