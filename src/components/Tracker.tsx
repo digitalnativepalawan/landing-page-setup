@@ -501,19 +501,27 @@ function RepoLinks({ repo, className }: { repo: Repository; className?: string }
 function RepoActions({
   repo,
   onView,
+  onEdit,
   onDelete,
 }: {
   repo: Repository;
   onView: (repo: Repository) => void;
+  onEdit: (repo: Repository) => void;
   onDelete: (id: number) => void;
 }) {
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       <button
         onClick={() => onView(repo)}
         className="rounded-lg bg-[var(--mq-gold)] px-3 py-1.5 text-xs font-bold text-black"
       >
         View
+      </button>
+      <button
+        onClick={() => onEdit(repo)}
+        className="rounded-lg border border-[var(--mq-line)] px-3 py-1.5 text-xs font-semibold text-[var(--mq-text)] hover:border-[var(--mq-gold)]"
+      >
+        Edit
       </button>
       <button
         onClick={() => onDelete(repo.id)}
@@ -524,6 +532,7 @@ function RepoActions({
     </div>
   );
 }
+
 
 function StatsDrawer({ repo, onClose }: { repo: Repository | null; onClose: () => void }) {
   if (!repo) return null;
