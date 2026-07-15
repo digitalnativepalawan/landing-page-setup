@@ -100,6 +100,8 @@ function fromDb(r: DbRow): Repository {
     description: r.description,
     githubUrl: r.github_url,
     websiteUrl: r.website_url,
+    websiteTitle: r.website_title ?? "",
+    websiteDescription: r.website_description ?? "",
     imageUrl: r.image_url,
     licenseType: r.license_type,
     isMit: r.is_mit,
