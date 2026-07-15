@@ -260,8 +260,8 @@ export default function Tracker() {
     const payload: FormState = { ...form, name };
     setSaving(true);
     const { error } = editingId
-      ? await supabase.from("repositories").update(toDb(form)).eq("id", editingId)
-      : await supabase.from("repositories").insert(toDb(form));
+      ? await supabase.from("repositories").update(toDb(payload)).eq("id", editingId)
+      : await supabase.from("repositories").insert(toDb(payload));
     setSaving(false);
     if (error) {
       setError(error.message);
